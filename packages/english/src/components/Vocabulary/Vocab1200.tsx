@@ -110,8 +110,8 @@ const Vocab1200: React.FC = () => {
 
     // 顯示單字表或考試頁面
     return (
-        <div style={{ padding: 24 }}>
-            <h2>國中1200單字表</h2>
+        <div >
+            <h3>國中1200單字表</h3>
             {!showQuiz ? (
                 <>
                     <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>

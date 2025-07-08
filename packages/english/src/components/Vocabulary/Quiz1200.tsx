@@ -25,6 +25,7 @@ const maskWordInSentence = (sentence: string, word: string): string => {
     return sentence.replace(pattern, '____');
 };
 
+
 const Quiz1200: React.FC<Quiz1200Props> = ({ vocabList, onCancel }) => {
     const [step, setStep] = useState<'setup' | 'quiz' | 'result'>('setup');
     const [questionCount, setQuestionCount] = useState(10);
@@ -32,6 +33,8 @@ const Quiz1200: React.FC<Quiz1200Props> = ({ vocabList, onCancel }) => {
     const [userAnswers, setUserAnswers] = useState<{ [idx: number]: string }>({});
     const [results, setResults] = useState<QuizResult[]>([]);
     const [statusFilter, setStatusFilter] = useState<string>('全部');
+    // 新增 quizStatus 狀態
+    const [quizStatus, setQuizStatus] = useState<'success' | 'fail' | null>(null);
     // 新增題號範圍 state
     const [startIndex, setStartIndex] = useState(1);
     const [endIndex, setEndIndex] = useState(vocabList.length);
@@ -83,6 +86,10 @@ const Quiz1200: React.FC<Quiz1200Props> = ({ vocabList, onCancel }) => {
             meaning: q.meaning,
         }));
 
+        // 根據答題結果設定 quizStatus
+        const allCorrect = res.every(r => r.correct);
+        setQuizStatus(allCorrect ? 'success' : 'fail');
+
         // 更新 localStorage status
         try {
             const STORAGE_KEY = 'Vocab1200';
@@ -107,7 +114,7 @@ const Quiz1200: React.FC<Quiz1200Props> = ({ vocabList, onCancel }) => {
     };
 
     return (
-        <div className="quiz1200-bg">
+        <div className={`quiz1200-bg${step === 'quiz' ? ' quiz1200-full-width' : ''}`}>
             <style>{`
                 .quiz1200-bg {
                     font-family: "Helvetica Neue", "Arial", sans-serif;
@@ -119,6 +126,9 @@ const Quiz1200: React.FC<Quiz1200Props> = ({ vocabList, onCancel }) => {
                     justify-content: center;
                     align-items: flex-start;
                 }
+                .quiz1200-bg.quiz1200-full-width {
+                    justify-content: stretch;
+                }
                 .quiz1200-card {
                     background-color: #fff;
                     border-radius: 18px;
@@ -128,6 +138,9 @@ const Quiz1200: React.FC<Quiz1200Props> = ({ vocabList, onCancel }) => {
                     width: 100%;
                     border: 1.5px solid #e0e7ff;
                     position: relative;
+                }
+                .quiz1200-card.full-width {
+                    max-width: 100%;
                 }
                 .quiz1200-title {
                     font-size: 2.1rem;
@@ -147,9 +160,7 @@ const Quiz1200: React.FC<Quiz1200Props> = ({ vocabList, onCancel }) => {
                     margin-bottom: 1.2rem;
                 }
                 .quiz1200-row {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
+                    display: flex;                   
                     flex-wrap: wrap;
                     gap: 1rem;
                 }
@@ -292,7 +303,7 @@ const Quiz1200: React.FC<Quiz1200Props> = ({ vocabList, onCancel }) => {
                     }
                 }
             `}</style>
-            <div className="quiz1200-card">
+            <div className={`quiz1200-card${step === 'quiz' ? ' full-width' : ''}`}>
                 {step === 'setup' && (
                     <>
                         <div className="quiz1200-title">單字測驗</div>
@@ -413,53 +424,61 @@ const Quiz1200: React.FC<Quiz1200Props> = ({ vocabList, onCancel }) => {
                                 submitQuiz();
                             }}
                         >
-                            <ol>
-                                {questions.map((q, idx) => (
-                                    <li key={idx} style={{ marginBottom: 20 }}>
-                                        <div>
-                                            <span style={{ fontWeight: 700, color: "#2563eb" }}>
-                                                Q{idx + 1}
-                                            </span>
-                                            <strong style={{ marginLeft: 8 }}>{q.meaning}</strong>
-                                            <span style={{ color: "#64748b", marginLeft: 6, fontSize: "0.98em" }}>
-                                                （{q.pos}）
-                                            </span>
-                                        </div>
-                                        {/* 顯示例句1，遮蔽單字 */}
-                                        {q.example1 && (
-                                            <div className="quiz1200-example" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                                例句：{maskWordInSentence(q.example1, q.word)}
-                                                <button
-                                                    type="button"
-                                                    title="朗讀例句"
-                                                    style={{
-                                                        marginLeft: 8,
-                                                        border: 'none',
-                                                        background: 'none',
-                                                        cursor: 'pointer',
-                                                        fontSize: '1.1em',
-                                                        color: '#2563eb',
-                                                        padding: 0,
-                                                    }}
-                                                    onClick={() => handleSpeak(q.example1)}
-                                                >
-                                                    <span role="img" aria-label="speak">🔊</span>
-                                                </button>
-                                            </div>
-                                        )}
-                                        <div>
-                                            <input
-                                                className="quiz1200-input"
-                                                type="text"
-                                                placeholder="請輸入英文單字"
-                                                value={userAnswers[idx] || ''}
-                                                onChange={e => handleInput(idx, e.target.value)}
-                                                style={{ width: '80%', marginTop: 4 }}
-                                            />
-                                        </div>
-                                    </li>
+                            {/* 三題同列 */}
+                            <div>
+                                {Array.from({ length: Math.ceil(questions.length / 3) }).map((_, rowIdx) => (
+                                    <div className="quiz1200-row" key={rowIdx} style={{ marginBottom: 24 }}>
+                                        {questions.slice(rowIdx * 3, rowIdx * 3 + 3).map((q, idxInRow) => {
+                                            const idx = rowIdx * 3 + idxInRow;
+                                            return (
+                                                <div key={idx} style={{ flex: 1, minWidth: 0, maxWidth: '32%' }}>
+                                                    <div>
+                                                        <span style={{ fontWeight: 700, color: "#2563eb" }}>
+                                                            Q{idx + 1}
+                                                        </span>
+                                                        <strong style={{ marginLeft: 8 }}>{q.meaning}</strong>
+                                                        <span style={{ color: "#64748b", marginLeft: 6, fontSize: "0.98em" }}>
+                                                            （{q.pos}）
+                                                        </span>
+                                                    </div>
+                                                    {/* 顯示例句1，遮蔽單字 */}
+                                                    {q.example1 && (
+                                                        <div className="quiz1200-example" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                                            例句：{maskWordInSentence(q.example1, q.word)}
+                                                            <button
+                                                                type="button"
+                                                                title="朗讀例句"
+                                                                style={{
+                                                                    marginLeft: 8,
+                                                                    border: 'none',
+                                                                    background: 'none',
+                                                                    cursor: 'pointer',
+                                                                    fontSize: '1.1em',
+                                                                    color: '#2563eb',
+                                                                    padding: 0,
+                                                                }}
+                                                                onClick={() => handleSpeak(q.example1)}
+                                                            >
+                                                                <span role="img" aria-label="speak">🔊</span>
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                    <div>
+                                                        <input
+                                                            className="quiz1200-input"
+                                                            type="text"
+                                                            placeholder="請輸入英文單字"
+                                                            value={userAnswers[idx] || ''}
+                                                            onChange={e => handleInput(idx, e.target.value)}
+                                                            style={{ width: '90%', marginTop: 4 }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 ))}
-                            </ol>
+                            </div>
                             <div className="quiz1200-button-group">
                                 <button
                                     type="submit"
@@ -484,6 +503,14 @@ const Quiz1200: React.FC<Quiz1200Props> = ({ vocabList, onCancel }) => {
                         <div className="quiz1200-title" style={{ fontSize: "1.3rem", marginBottom: 0 }}>
                             成績
                         </div>
+                        {/* 顯示本次所有題目的中文意思 */}
+                        <div style={{ textAlign: 'center', marginBottom: '0.8rem', color: '#374151', fontWeight: 600 }}>
+                            {results.map((r, idx) => (
+                                <span key={idx}>
+                                    {r.meaning}{idx < results.length - 1 ? '、' : ''}
+                                </span>
+                            ))}
+                        </div>
                         <div className="quiz1200-score">
                             <span role="img" aria-label="star">🌟</span>
                             {results.filter(r => r.correct).length} / {results.length} 題
@@ -495,7 +522,7 @@ const Quiz1200: React.FC<Quiz1200Props> = ({ vocabList, onCancel }) => {
                                         className={`quiz1200-result-word ${r.correct ? 'quiz1200-result-correct' : 'quiz1200-result-wrong'
                                             }`}
                                     >
-                                        {r.word}
+                                        {r.meaning} {r.word}
                                     </span>
                                     ：你的答案「{r.userAnswer}」
                                     {r.correct ? (

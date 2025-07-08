@@ -11,22 +11,34 @@ const App: React.FC = () => {
         <div>
             <h1>English Learning</h1>
             <div style={{ marginBottom: 16 }}>
-                {/*
-                <Button onClick={() => setTab("verb")} style={{ marginRight: 8 }}>
+                <Button
+                    type={tab === "vocab1200" ? "primary" : "default"}
+                    onClick={() => setTab("vocab1200")}
+                    style={{ marginRight: 8 }}
+                    size="large"
+                >
+                    國中1200單字
+                </Button>
+                <Button
+                    type={tab === "verb" ? "primary" : "default"}
+                    onClick={() => setTab("verb")}
+                    size="large"
+                >
                     不規則動詞
                 </Button>
+                {/*
                 <Button onClick={() => setTab("article")} style={{ marginRight: 8 }}>
                     冠詞練習
                 </Button>
+                
+                
                 */}
-                <Button color="primary" variant="solid" onClick={() => setTab("vocab1200")}>
-                    國中1200單字
-                </Button>
             </div>
             {/* 
-            {tab === "verb" && <IrregularVerbTable />}
+            
             {tab === "article" && <ArticlePractice />}
             */}
+            {tab === "verb" && <IrregularVerbTable />}
             {tab === "vocab1200" && <Vocab1200 />}
         </div>
     );
