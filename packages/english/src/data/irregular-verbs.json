@@ -1,0 +1,32 @@
+[
+    {
+        "base": "be",
+        "past": "was/were",
+        "participle": "been",
+        "meaning": "是/在"
+    },
+    {
+        "base": "begin",
+        "past": "began",
+        "participle": "begun",
+        "meaning": "開始"
+    },
+    {
+        "base": "break",
+        "past": "broke",
+        "participle": "broken",
+        "meaning": "打破"
+    },
+    {
+        "base": "bring",
+        "past": "brought",
+        "participle": "brought",
+        "meaning": "帶來"
+    },
+    {
+        "base": "buy",
+        "past": "bought",
+        "participle": "bought",
+        "meaning": "買"
+    }
+]

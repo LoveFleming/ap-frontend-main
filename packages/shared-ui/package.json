@@ -1,0 +1,13 @@
+{
+    "name": "@shared-ui",
+    "main": "src/index.tsx",
+    "types": "src/index.tsx",
+    "dependencies": {
+        "antd": "workspace:*",
+        "@ant-design/icons": "workspace:*",
+        "react-router": "workspace:*",
+        "react-i18next": "workspace:*",
+        "react": "workspace:*",
+        "react-dom": "workspace:*"
+    }
+}

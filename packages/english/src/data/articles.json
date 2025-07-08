@@ -1,0 +1,17 @@
+{
+    "explanation": "a 用於以子音音素開頭的單字，an 用於以母音音素開頭的單字，the 用於特定或已知的事物。",
+    "examples": [
+        {
+            "sentence": "I saw ___ apple on the table.",
+            "answer": "an"
+        },
+        {
+            "sentence": "She is ___ teacher.",
+            "answer": "a"
+        },
+        {
+            "sentence": "___ sun rises in the east.",
+            "answer": "The"
+        }
+    ]
+}
