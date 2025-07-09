@@ -19,7 +19,7 @@ const getStatusPieData = (vocabList: VocabItem[]) => {
     }));
 };
 
-interface VocabTable1200Props {
+interface ProgressChartProps {
     vocabList: VocabItem[];
     handleImport: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleExport: () => void;
@@ -53,7 +53,7 @@ const renderCustomizedLabel = ({
     );
 };
 
-const VocabTable1200: React.FC<VocabTable1200Props> = ({ vocabList, handleImport, handleExport }) => {
+const ProgressChart: React.FC<ProgressChartProps> = ({ vocabList, handleImport, handleExport }) => {
     const statusPieData = getStatusPieData(vocabList);
 
     return (
@@ -79,43 +79,6 @@ const VocabTable1200: React.FC<VocabTable1200Props> = ({ vocabList, handleImport
                         <Legend />
                     </PieChart>
                 </ResponsiveContainer>
-            </div>
-            <div style={{ marginBottom: 16 }}>
-                <input
-                    type="file"
-                    accept=".csv"
-                    id="csvInput"
-                    style={{ display: 'none' }}
-                    onChange={handleImport}
-                />
-                <button
-                    onClick={() => document.getElementById('csvInput')?.click()}
-                    style={{
-                        padding: '0.5rem 1rem',
-                        backgroundColor: '#10b981',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '0.375rem',
-                        cursor: 'pointer',
-                        marginRight: 8
-                    }}
-                >
-                    匯入 CSV
-                </button>
-                <button
-                    onClick={handleExport}
-                    style={{
-                        padding: '0.5rem 1rem',
-                        backgroundColor: '#3b82f6',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '0.375rem',
-                        cursor: 'pointer',
-                        marginRight: 8
-                    }}
-                >
-                    匯出 CSV
-                </button>
             </div>
             <div style={{ overflowX: 'auto', maxHeight: '70vh' }}>
                 <table style={{ borderCollapse: 'collapse', width: '100%' }}>
@@ -149,4 +112,4 @@ const VocabTable1200: React.FC<VocabTable1200Props> = ({ vocabList, handleImport
     );
 };
 
-export default VocabTable1200;
+export default ProgressChart;

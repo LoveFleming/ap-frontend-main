@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Quiz1200 from './Quiz1200';
-import VocabTable1200 from './VocabTable1200';
+// Progress Chart
+import ProgressChart from './VocabTable1200';
+// Pie Chart
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 // 國中1200單字資料型別
 export interface VocabItem {
     topic: string;    // 主題
@@ -111,39 +114,88 @@ const Vocab1200: React.FC = () => {
     // 顯示單字表或考試頁面
     return (
         <div >
-            <h3>國中1200單字表</h3>
+
             {!showQuiz ? (
                 <>
-                    <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
-                        <button
-                            style={{
-                                padding: '0.5rem 1rem',
-                                backgroundColor: '#3b82f6',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '0.375rem',
-                                cursor: 'pointer',
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            單字表
-                        </button>
-                        <button
-                            style={{
-                                padding: '0.5rem 1rem',
-                                backgroundColor: '#f59e42',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '0.375rem',
-                                cursor: 'pointer',
-                                fontWeight: 'bold'
-                            }}
-                            onClick={() => setShowQuiz(true)}
-                        >
-                            考試
-                        </button>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: 24,
+                            gap: 8,
+                        }}
+                    >
+                        <div style={{ fontSize: 20, fontWeight: 'bold', color: '#222' }}>
+                            Progress Chart
+                        </div>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                            <button
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    backgroundColor: '#3b82f6',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '0.375rem',
+                                    cursor: 'pointer',
+                                    fontWeight: 'bold'
+                                }}
+                            >
+                                單字表
+                            </button>
+                            <button
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    backgroundColor: '#f59e42',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '0.375rem',
+                                    cursor: 'pointer',
+                                    fontWeight: 'bold'
+                                }}
+                                onClick={() => setShowQuiz(true)}
+                            >
+                                考試
+                            </button>
+                            <input
+                                type="file"
+                                accept=".csv"
+                                id="csvInput"
+                                style={{ display: 'none' }}
+                                onChange={handleImport}
+                            />
+                            <button
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    backgroundColor: '#10b981',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '0.375rem',
+                                    cursor: 'pointer',
+                                    fontWeight: 'bold'
+                                }}
+                                onClick={() => document.getElementById('csvInput')?.click()}
+                            >
+                                匯入 CSV
+                            </button>
+                            <button
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    backgroundColor: '#3b82f6',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '0.375rem',
+                                    cursor: 'pointer',
+                                    fontWeight: 'bold'
+                                }}
+                                onClick={handleExport}
+                            >
+                                匯出 CSV
+                            </button>
+                        </div>
                     </div>
-                    <VocabTable1200
+
+                    <ProgressChart
                         vocabList={vocabList}
                         handleImport={handleImport}
                         handleExport={handleExport}
