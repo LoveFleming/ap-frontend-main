@@ -17,14 +17,14 @@ const App: React.FC = () => {
                     style={{ marginRight: 8 }}
                     size="large"
                 >
-                    國中1200單字
+                    1200 Vocabulary
                 </Button>
                 <Button
                     type={tab === "verb" ? "primary" : "default"}
                     onClick={() => setTab("verb")}
                     size="large"
                 >
-                    不規則動詞
+                    Irregular Verb
                 </Button>
                 {/*
                 <Button onClick={() => setTab("article")} style={{ marginRight: 8 }}>

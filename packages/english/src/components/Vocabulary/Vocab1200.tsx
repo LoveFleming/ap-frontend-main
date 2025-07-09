@@ -130,33 +130,8 @@ const Vocab1200: React.FC = () => {
                             Progress Chart
                         </div>
                         <div style={{ display: 'flex', gap: 8 }}>
-                            <button
-                                style={{
-                                    padding: '0.5rem 1rem',
-                                    backgroundColor: '#3b82f6',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '0.375rem',
-                                    cursor: 'pointer',
-                                    fontWeight: 'bold'
-                                }}
-                            >
-                                單字表
-                            </button>
-                            <button
-                                style={{
-                                    padding: '0.5rem 1rem',
-                                    backgroundColor: '#f59e42',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '0.375rem',
-                                    cursor: 'pointer',
-                                    fontWeight: 'bold'
-                                }}
-                                onClick={() => setShowQuiz(true)}
-                            >
-                                考試
-                            </button>
+
+
                             <input
                                 type="file"
                                 accept=".csv"
@@ -176,7 +151,7 @@ const Vocab1200: React.FC = () => {
                                 }}
                                 onClick={() => document.getElementById('csvInput')?.click()}
                             >
-                                匯入 CSV
+                                Import CSV
                             </button>
                             <button
                                 style={{
@@ -190,7 +165,21 @@ const Vocab1200: React.FC = () => {
                                 }}
                                 onClick={handleExport}
                             >
-                                匯出 CSV
+                                Export CSV
+                            </button>
+                            <button
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    backgroundColor: '#f59e42',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '0.375rem',
+                                    cursor: 'pointer',
+                                    fontWeight: 'bold'
+                                }}
+                                onClick={() => setShowQuiz(true)}
+                            >
+                                Start Quiz
                             </button>
                         </div>
                     </div>
