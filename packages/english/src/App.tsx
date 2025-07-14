@@ -38,7 +38,7 @@ const App: React.FC = () => {
             
             {tab === "article" && <ArticlePractice />}
             */}
-            {tab === "verb" && <IrregularVerbTable />}
+            {tab === "verb" && <IrregularVerbTable setAppTab={setTab} />}
             {tab === "vocab1200" && <Vocab1200 />}
         </div>
     );

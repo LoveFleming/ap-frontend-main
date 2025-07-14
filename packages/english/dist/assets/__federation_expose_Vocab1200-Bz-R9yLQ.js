@@ -24905,7 +24905,7 @@ const Vocab1200 = () => {
         `"${item.meaning}"`,
         `"${item.example1}"`,
         `"${item.example2}"`,
-        `"尚未作答"`
+        `"${item.status || "尚未作答"}"`
       ].join(",")
     );
     const csvContent = [header.join(","), ...rows].join("\n");

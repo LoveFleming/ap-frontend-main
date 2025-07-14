@@ -14,7 +14,11 @@ export interface VerbItem {
     status?: string;
 }
 
-export default function IrregularVerbTable() {
+interface IrregularVerbTableProps {
+    setAppTab?: (tab: "verb" | "article" | "vocab1200") => void;
+}
+
+export default function IrregularVerbTable(props: IrregularVerbTableProps) {
     const [verbs, setVerbs] = useState<VerbItem[]>([]);
     const [activeTab, setActiveTab] = useState<'dashboard' | 'quiz' | 'articles'>('dashboard');
     const [testAmount, setTestAmount] = useState(5);
@@ -276,6 +280,7 @@ export default function IrregularVerbTable() {
                         onCancel={() => {
                             setActiveTab('dashboard');
                             setQuizAutoStart(false);
+                            props.setAppTab?.("verb");
                         }}
                         autoStart={quizAutoStart}
                     />

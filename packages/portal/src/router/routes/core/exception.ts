@@ -29,7 +29,7 @@ const routes: AppRouteRecordRaw[] = [
 		Component: ContainerLayout,
 		handle: {
 			order: exception,
-			// hideInMenu: true,
+			hideInMenu: true,
 			title: $t("common.menu.exception"),
 			icon: createElement(IssuesCloseOutlined),
 		},

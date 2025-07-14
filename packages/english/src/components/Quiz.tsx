@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { VerbItem } from '../App';
+import { VerbItem } from './IrregularVerbTable';
 
 interface QuizProps {
     verbs: VerbItem[];
@@ -147,7 +147,7 @@ export default function Quiz({ verbs, testAmount, setTestAmount, onCancel, autoS
                             <button
                                 onClick={() => {
                                     onCancel();
-                                    window.location.reload();
+                                    //window.location.reload();
                                 }}
                                 style={{
                                     padding: '0.5rem 1rem',

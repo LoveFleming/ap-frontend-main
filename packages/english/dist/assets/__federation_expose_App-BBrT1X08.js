@@ -1,7 +1,7 @@
 import { importShared } from './__federation_fn_import-DIdBnpG9.js';
 import { j as jsxRuntimeExports } from './jsx-runtime-CsM3lTE3.js';
 import IrregularVerbTable from './__federation_expose_IrregularVerbTable-DHWIv2bz.js';
-import Vocab1200, { r as reactIsExports } from './__federation_expose_Vocab1200-DiWDd5o8.js';
+import Vocab1200, { r as reactIsExports } from './__federation_expose_Vocab1200-Bz-R9yLQ.js';
 import { g as getDefaultExportFromCjs } from './index-BxRxKft-.js';
 
 var classnames = {exports: {}};
