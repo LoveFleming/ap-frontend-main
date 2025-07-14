@@ -2,6 +2,31 @@ import { importShared } from './__federation_fn_import-DIdBnpG9.js';
 import { j as jsxRuntimeExports } from './jsx-runtime-CsM3lTE3.js';
 import { c as commonjsGlobal, g as getDefaultExportFromCjs } from './index-BxRxKft-.js';
 
+var reactIs = {exports: {}};
+
+var reactIs_production_min = {};
+
+/**
+ * @license React
+ * react-is.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+var b=Symbol.for("react.element"),c$1=Symbol.for("react.portal"),d=Symbol.for("react.fragment"),e=Symbol.for("react.strict_mode"),f=Symbol.for("react.profiler"),g=Symbol.for("react.provider"),h=Symbol.for("react.context"),k$1=Symbol.for("react.server_context"),l=Symbol.for("react.forward_ref"),m=Symbol.for("react.suspense"),n=Symbol.for("react.suspense_list"),p=Symbol.for("react.memo"),q=Symbol.for("react.lazy"),t=Symbol.for("react.offscreen"),u;u=Symbol.for("react.module.reference");
+function v(a){if("object"===typeof a&&null!==a){var r=a.$$typeof;switch(r){case b:switch(a=a.type,a){case d:case f:case e:case m:case n:return a;default:switch(a=a&&a.$$typeof,a){case k$1:case h:case l:case q:case p:case g:return a;default:return r}}case c$1:return r}}}reactIs_production_min.ContextConsumer=h;reactIs_production_min.ContextProvider=g;reactIs_production_min.Element=b;reactIs_production_min.ForwardRef=l;reactIs_production_min.Fragment=d;reactIs_production_min.Lazy=q;reactIs_production_min.Memo=p;reactIs_production_min.Portal=c$1;reactIs_production_min.Profiler=f;reactIs_production_min.StrictMode=e;reactIs_production_min.Suspense=m;
+reactIs_production_min.SuspenseList=n;reactIs_production_min.isAsyncMode=function(){return  false};reactIs_production_min.isConcurrentMode=function(){return  false};reactIs_production_min.isContextConsumer=function(a){return v(a)===h};reactIs_production_min.isContextProvider=function(a){return v(a)===g};reactIs_production_min.isElement=function(a){return "object"===typeof a&&null!==a&&a.$$typeof===b};reactIs_production_min.isForwardRef=function(a){return v(a)===l};reactIs_production_min.isFragment=function(a){return v(a)===d};reactIs_production_min.isLazy=function(a){return v(a)===q};reactIs_production_min.isMemo=function(a){return v(a)===p};
+reactIs_production_min.isPortal=function(a){return v(a)===c$1};reactIs_production_min.isProfiler=function(a){return v(a)===f};reactIs_production_min.isStrictMode=function(a){return v(a)===e};reactIs_production_min.isSuspense=function(a){return v(a)===m};reactIs_production_min.isSuspenseList=function(a){return v(a)===n};
+reactIs_production_min.isValidElementType=function(a){return "string"===typeof a||"function"===typeof a||a===d||a===f||a===e||a===m||a===n||a===t||"object"===typeof a&&null!==a&&(a.$$typeof===q||a.$$typeof===p||a.$$typeof===g||a.$$typeof===h||a.$$typeof===l||a.$$typeof===u||void 0!==a.getModuleId)?true:false};reactIs_production_min.typeOf=v;
+
+{
+  reactIs.exports = reactIs_production_min;
+}
+
+var reactIsExports = reactIs.exports;
+
 const React$v = await importShared('react');
 const {useState: useState$4} = React$v;
 
@@ -21,8 +46,16 @@ const Quiz1200 = ({ vocabList, onCancel }) => {
   const [userAnswers, setUserAnswers] = useState$4({});
   const [results, setResults] = useState$4([]);
   const [statusFilter, setStatusFilter] = useState$4("全部");
+  const [quizStatus, setQuizStatus] = useState$4(null);
   const [startIndex, setStartIndex] = useState$4(1);
   const [endIndex, setEndIndex] = useState$4(vocabList.length);
+  const handleSpeak = (text) => {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utter = new window.SpeechSynthesisUtterance(text);
+    utter.lang = "en-US";
+    window.speechSynthesis.speak(utter);
+  };
   const getFilteredVocabList = () => {
     let filtered = vocabList;
     if (statusFilter !== "全部") {
@@ -53,6 +86,8 @@ const Quiz1200 = ({ vocabList, onCancel }) => {
       userAnswer: userAnswers[idx] || "",
       meaning: q.meaning
     }));
+    const allCorrect = res.every((r) => r.correct);
+    setQuizStatus(allCorrect ? "success" : "fail");
     try {
       const STORAGE_KEY = "Vocab1200";
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -71,11 +106,11 @@ const Quiz1200 = ({ vocabList, onCancel }) => {
     setResults(res);
     setStep("result");
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "quiz1200-bg", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `quiz1200-bg${step === "quiz" ? " quiz1200-full-width" : ""}`, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("style", { children: `
                 .quiz1200-bg {
                     font-family: "Helvetica Neue", "Arial", sans-serif;
-                    background-color: #f5f5f5;
+                    background: linear-gradient(120deg, #e0e7ff 0%, #f5f5f5 100%);
                     min-height: 100vh;
                     margin: 0;
                     padding: 2rem;
@@ -83,38 +118,72 @@ const Quiz1200 = ({ vocabList, onCancel }) => {
                     justify-content: center;
                     align-items: flex-start;
                 }
+                .quiz1200-bg.quiz1200-full-width {
+                    justify-content: stretch;
+                }
                 .quiz1200-card {
                     background-color: #fff;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                    padding: 2rem;
-                    max-width: 600px;
+                    border-radius: 18px;
+                    box-shadow: 0 6px 24px rgba(59,130,246,0.10), 0 1.5px 4px rgba(0,0,0,0.04);
+                    padding: 2.5rem 2rem 2rem 2rem;
+                    max-width: 520px;
                     width: 100%;
+                    border: 1.5px solid #e0e7ff;
+                    position: relative;
+                }
+                .quiz1200-card.full-width {
+                    max-width: 100%;
                 }
                 .quiz1200-title {
-                    font-size: 1.8rem;
-                    margin-bottom: 1.5rem;
-                    color: #1f2937;
+                    font-size: 2.1rem;
+                    margin-bottom: 1.2rem;
+                    color: #2563eb;
                     text-align: center;
-                    font-weight: bold;
+                    font-weight: 800;
+                    letter-spacing: 1px;
+                    text-shadow: 0 2px 8px #e0e7ff;
+                }
+                .quiz1200-divider {
+                    border: none;
+                    border-top: 1.5px solid #e5e7eb;
+                    margin: 1.2rem 0 1.5rem 0;
                 }
                 .quiz1200-section {
-                    margin-bottom: 1.5rem;
+                    margin-bottom: 1.2rem;
                 }
                 .quiz1200-row {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
+                    display: flex;                   
                     flex-wrap: wrap;
                     gap: 1rem;
                 }
                 .quiz1200-label {
-                    font-weight: 600;
+                    font-weight: 700;
                     color: #374151;
+                    font-size: 1.08rem;
                 }
                 .quiz1200-value {
-                    font-size: 1.1rem;
-                    color: #111827;
+                    font-size: 1.13rem;
+                    color: #1e293b;
+                }
+                .quiz1200-input,
+                .quiz1200-select {
+                    border: 1.5px solid #c7d2fe;
+                    border-radius: 6px;
+                    padding: 6px 10px;
+                    font-size: 1.08rem;
+                    outline: none;
+                    transition: border 0.2s, box-shadow 0.2s;
+                    box-shadow: 0 1px 2px rgba(59,130,246,0.04);
+                    background: #f8fafc;
+                    text-align: left !important;
+                }
+                .quiz1200-card input[type="number"] {
+                    text-align: left !important;
+                }
+                .quiz1200-input:focus,
+                .quiz1200-select:focus {
+                    border: 1.5px solid #2563eb;
+                    box-shadow: 0 0 0 2px #dbeafe;
                 }
                 .quiz1200-button-group {
                     display: flex;
@@ -123,33 +192,110 @@ const Quiz1200 = ({ vocabList, onCancel }) => {
                     margin-top: 1.5rem;
                 }
                 .quiz1200-btn {
-                    padding: 0.75rem 2rem;
-                    font-size: 1rem;
+                    padding: 0.85rem 2.2rem;
+                    font-size: 1.18rem;
                     border: none;
                     border-radius: 8px;
                     cursor: pointer;
-                    transition: all 0.2s;
+                    transition: all 0.18s;
+                    font-weight: 700;
+                    box-shadow: 0 2px 8px rgba(59,130,246,0.08);
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5em;
                 }
                 .quiz1200-btn.start {
-                    background-color: #3b82f6;
+                    background: linear-gradient(90deg, #3b82f6 60%, #2563eb 100%);
                     color: white;
                 }
                 .quiz1200-btn.start:disabled {
-                    background-color: #a5b4fc;
+                    background: #a5b4fc;
                     cursor: not-allowed;
                 }
                 .quiz1200-btn.start:hover:not(:disabled) {
-                    background-color: #2563eb;
+                    background: linear-gradient(90deg, #2563eb 60%, #1d4ed8 100%);
+                    box-shadow: 0 4px 16px #3b82f633;
                 }
                 .quiz1200-btn.back {
-                    background-color: #ef4444;
+                    background: linear-gradient(90deg, #ef4444 60%, #dc2626 100%);
                     color: white;
                 }
                 .quiz1200-btn.back:hover {
-                    background-color: #dc2626;
+                    background: linear-gradient(90deg, #dc2626 60%, #b91c1c 100%);
                 }
-                ` }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "quiz1200-card", children: [
+                .quiz1200-btn.green {
+                    background: linear-gradient(90deg, #10b981 60%, #059669 100%);
+                    color: white;
+                }
+                .quiz1200-btn.green:hover {
+                    background: linear-gradient(90deg, #059669 60%, #047857 100%);
+                }
+                .quiz1200-btn.red {
+                    background: linear-gradient(90deg, #ef4444 60%, #dc2626 100%);
+                    color: white;
+                }
+                .quiz1200-btn.red:hover {
+                    background: linear-gradient(90deg, #dc2626 60%, #b91c1c 100%);
+                }
+                .quiz1200-progress-bar-bg {
+                    width: 100%;
+                    height: 12px;
+                    background: #e0e7ff;
+                    border-radius: 6px;
+                    margin: 0.7rem 0 1.2rem 0;
+                    overflow: hidden;
+                }
+                .quiz1200-progress-bar {
+                    height: 100%;
+                    background: linear-gradient(90deg, #3b82f6 60%, #2563eb 100%);
+                    border-radius: 6px;
+                    transition: width 0.3s;
+                }
+                .quiz1200-example {
+                    background: #f1f5f9;
+                    border-radius: 6px;
+                    padding: 0.7em 1em;
+                    margin: 8px 0 10px 0;
+                    color: #475569;
+                    font-style: italic;
+                    font-size: 1.01rem;
+                }
+                .quiz1200-score {
+                    font-size: 2.2rem;
+                    font-weight: 800;
+                    color: #2563eb;
+                    text-align: center;
+                    margin-bottom: 1.2rem;
+                    letter-spacing: 1px;
+                }
+                .quiz1200-result-list li {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.7em;
+                    margin-bottom: 10px;
+                    font-size: 1.08rem;
+                }
+                .quiz1200-result-word {
+                    font-weight: bold;
+                    font-size: 1.13rem;
+                }
+                .quiz1200-result-correct {
+                    color: #16a34a;
+                }
+                .quiz1200-result-wrong {
+                    color: #dc2626;
+                }
+                @media (max-width: 600px) {
+                    .quiz1200-card {
+                        padding: 1.2rem 0.5rem;
+                        max-width: 98vw;
+                    }
+                    .quiz1200-title {
+                        font-size: 1.3rem;
+                    }
+                }
+            ` }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `quiz1200-card${step === "quiz" ? " full-width" : ""}`, children: [
       step === "setup" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "quiz1200-title", children: "單字測驗" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "quiz1200-section", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "quiz1200-row", children: [
@@ -158,6 +304,8 @@ const Quiz1200 = ({ vocabList, onCancel }) => {
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "input",
               {
+                className: "quiz1200-input",
+                style: { width: 60 },
                 type: "number",
                 min: 1,
                 max: vocabList.length,
@@ -166,14 +314,15 @@ const Quiz1200 = ({ vocabList, onCancel }) => {
                   const val = Math.max(1, Math.min(vocabList.length, parseInt(e.target.value) || 1));
                   setStartIndex(val);
                   if (val > endIndex) setEndIndex(val);
-                },
-                style: { width: 60, marginLeft: 8, marginRight: 4 }
+                }
               }
             ),
             "～",
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "input",
               {
+                className: "quiz1200-input",
+                style: { width: 60 },
                 type: "number",
                 min: startIndex,
                 max: vocabList.length,
@@ -181,8 +330,7 @@ const Quiz1200 = ({ vocabList, onCancel }) => {
                 onChange: (e) => {
                   const val = Math.max(startIndex, Math.min(vocabList.length, parseInt(e.target.value) || vocabList.length));
                   setEndIndex(val);
-                },
-                style: { width: 60, marginLeft: 4 }
+                }
               }
             )
           ] }),
@@ -197,9 +345,10 @@ const Quiz1200 = ({ vocabList, onCancel }) => {
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "quiz1200-value", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "select",
             {
+              className: "quiz1200-select",
+              style: { minWidth: 90 },
               value: statusFilter,
               onChange: (e) => setStatusFilter(e.target.value),
-              style: { padding: 4, borderRadius: 4, border: "1px solid #d1d5db" },
               children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "全部", children: "全部" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "尚未作答", children: "尚未作答" }),
@@ -213,32 +362,71 @@ const Quiz1200 = ({ vocabList, onCancel }) => {
             getFilteredVocabList().length
           ] })
         ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "quiz1200-section", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "quiz1200-row", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "quiz1200-label", children: "考試題數：" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "quiz1200-value", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                className: "quiz1200-input",
+                style: { width: 80 },
+                type: "number",
+                min: 1,
+                max: getFilteredVocabList().length,
+                value: questionCount,
+                onChange: (e) => {
+                  const val = Math.max(1, Math.min(getFilteredVocabList().length, parseInt(e.target.value) || 1));
+                  setQuestionCount(val);
+                }
+              }
+            ),
+            "／ 可用題數：",
+            getFilteredVocabList().length
+          ] })
+        ] }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "quiz1200-button-group", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "button",
             {
               className: "quiz1200-btn start",
               onClick: startQuiz,
               disabled: getFilteredVocabList().length === 0,
-              children: "開始考試"
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { role: "img", "aria-label": "rocket", children: "🚀" }),
+                " 開始考試"
+              ]
             }
           ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "button",
             {
               className: "quiz1200-btn back",
               onClick: onCancel,
-              children: "返回"
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { role: "img", "aria-label": "back", children: "⬅️" }),
+                " 返回"
+              ]
             }
           )
         ] })
       ] }),
       step === "quiz" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "quiz1200-title", style: { fontSize: "1.3rem", marginBottom: 0 }, children: [
           "作答中（",
           questions.length,
           " 題）"
         ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "quiz1200-progress-bar-bg", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: "quiz1200-progress-bar",
+            style: {
+              width: `${Math.round(
+                Object.keys(userAnswers).length / questions.length * 100
+              )}%`
+            }
+          }
+        ) }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "form",
           {
@@ -247,95 +435,130 @@ const Quiz1200 = ({ vocabList, onCancel }) => {
               submitQuiz();
             },
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("ol", { children: questions.map((q, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { style: { marginBottom: 16 }, children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: q.meaning }),
-                  "（",
-                  q.pos,
-                  "）"
-                ] }),
-                q.example1 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { margin: "8px 0", color: "#555", fontStyle: "italic" }, children: [
-                  "例句：",
-                  maskWordInSentence(q.example1, q.word)
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: Array.from({ length: Math.ceil(questions.length / 3) }).map((_, rowIdx) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "quiz1200-row", style: { marginBottom: 24 }, children: questions.slice(rowIdx * 3, rowIdx * 3 + 3).map((q, idxInRow) => {
+                const idx = rowIdx * 3 + idxInRow;
+                return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, minWidth: 0, maxWidth: "32%" }, children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { style: { fontWeight: 700, color: "#2563eb" }, children: [
+                      "Q",
+                      idx + 1
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { style: { marginLeft: 8 }, children: q.meaning }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { style: { color: "#64748b", marginLeft: 6, fontSize: "0.98em" }, children: [
+                      "（",
+                      q.pos,
+                      "）"
+                    ] })
+                  ] }),
+                  q.example1 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "quiz1200-example", style: { display: "flex", alignItems: "center", gap: 8 }, children: [
+                    "例句：",
+                    maskWordInSentence(q.example1, q.word),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        title: "朗讀例句",
+                        style: {
+                          marginLeft: 8,
+                          border: "none",
+                          background: "none",
+                          cursor: "pointer",
+                          fontSize: "1.1em",
+                          color: "#2563eb",
+                          padding: 0
+                        },
+                        onClick: () => handleSpeak(q.example1),
+                        children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { role: "img", "aria-label": "speak", children: "🔊" })
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      className: "quiz1200-input",
+                      type: "text",
+                      placeholder: "請輸入英文單字",
+                      value: userAnswers[idx] || "",
+                      onChange: (e) => handleInput(idx, e.target.value),
+                      style: { width: "90%", marginTop: 4 }
+                    }
+                  ) })
+                ] }, idx);
+              }) }, rowIdx)) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "quiz1200-button-group", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
                   {
-                    type: "text",
-                    placeholder: "請輸入英文單字",
-                    value: userAnswers[idx] || "",
-                    onChange: (e) => handleInput(idx, e.target.value),
-                    style: { width: "80%", padding: 4, marginTop: 4 }
+                    type: "submit",
+                    className: "quiz1200-btn green",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { role: "img", "aria-label": "check", children: "✅" }),
+                      " 送出答案"
+                    ]
                   }
-                ) })
-              ] }, idx)) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  type: "submit",
-                  style: {
-                    padding: "0.5rem 1rem",
-                    backgroundColor: "#10b981",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "0.375rem",
-                    cursor: "pointer",
-                    marginRight: 8
-                  },
-                  children: "送出答案"
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  type: "button",
-                  onClick: onCancel,
-                  style: {
-                    padding: "0.5rem 1rem",
-                    backgroundColor: "#ef4444",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "0.375rem",
-                    cursor: "pointer"
-                  },
-                  children: "放棄"
-                }
-              )
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    type: "button",
+                    className: "quiz1200-btn red",
+                    onClick: onCancel,
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { role: "img", "aria-label": "stop", children: "🛑" }),
+                      " 放棄"
+                    ]
+                  }
+                )
+              ] })
             ]
           }
         )
       ] }),
       step === "result" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "成績" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { marginBottom: 16 }, children: [
-          "答對 ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "quiz1200-title", style: { fontSize: "1.3rem", marginBottom: 0 }, children: "成績" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { textAlign: "center", marginBottom: "0.8rem", color: "#374151", fontWeight: 600 }, children: results.map((r, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+          r.meaning,
+          idx < results.length - 1 ? "、" : ""
+        ] }, idx)) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "quiz1200-score", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { role: "img", "aria-label": "star", children: "🌟" }),
           results.filter((r) => r.correct).length,
           " / ",
           results.length,
           " 題"
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("ol", { children: results.map((r, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { style: { marginBottom: 8 }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: r.correct ? "#16a34a" : "#dc2626", fontWeight: "bold" }, children: r.word }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("ol", { className: "quiz1200-result-list", children: results.map((r, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "span",
+            {
+              className: `quiz1200-result-word ${r.correct ? "quiz1200-result-correct" : "quiz1200-result-wrong"}`,
+              children: [
+                r.meaning,
+                " ",
+                r.word
+              ]
+            }
+          ),
           "：你的答案「",
           r.userAnswer,
           "」",
-          r.correct ? "✅" : `❌，正確答案：${r.word}`
+          r.correct ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { marginLeft: 4 }, role: "img", "aria-label": "correct", children: "✅" }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { marginLeft: 4 }, role: "img", "aria-label": "wrong", children: "❌" }),
+            "，正確答案：",
+            r.word
+          ] })
         ] }, idx)) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "quiz1200-button-group", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "button",
           {
+            className: "quiz1200-btn start",
             onClick: onCancel,
-            style: {
-              padding: "0.5rem 1rem",
-              backgroundColor: "#3b82f6",
-              color: "white",
-              border: "none",
-              borderRadius: "0.375rem",
-              cursor: "pointer"
-            },
-            children: "返回單字表"
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { role: "img", "aria-label": "back", children: "⬅️" }),
+              " 返回單字表"
+            ]
           }
-        )
+        ) })
       ] })
     ] })
   ] });
@@ -1716,31 +1939,6 @@ function isString(value) {
 var isString_1 = isString;
 
 const isString$1 = /*@__PURE__*/getDefaultExportFromCjs(isString_1);
-
-var reactIs = {exports: {}};
-
-var reactIs_production_min = {};
-
-/**
- * @license React
- * react-is.production.min.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-var b=Symbol.for("react.element"),c$1=Symbol.for("react.portal"),d=Symbol.for("react.fragment"),e=Symbol.for("react.strict_mode"),f=Symbol.for("react.profiler"),g=Symbol.for("react.provider"),h=Symbol.for("react.context"),k$1=Symbol.for("react.server_context"),l=Symbol.for("react.forward_ref"),m=Symbol.for("react.suspense"),n=Symbol.for("react.suspense_list"),p=Symbol.for("react.memo"),q=Symbol.for("react.lazy"),t=Symbol.for("react.offscreen"),u;u=Symbol.for("react.module.reference");
-function v(a){if("object"===typeof a&&null!==a){var r=a.$$typeof;switch(r){case b:switch(a=a.type,a){case d:case f:case e:case m:case n:return a;default:switch(a=a&&a.$$typeof,a){case k$1:case h:case l:case q:case p:case g:return a;default:return r}}case c$1:return r}}}reactIs_production_min.ContextConsumer=h;reactIs_production_min.ContextProvider=g;reactIs_production_min.Element=b;reactIs_production_min.ForwardRef=l;reactIs_production_min.Fragment=d;reactIs_production_min.Lazy=q;reactIs_production_min.Memo=p;reactIs_production_min.Portal=c$1;reactIs_production_min.Profiler=f;reactIs_production_min.StrictMode=e;reactIs_production_min.Suspense=m;
-reactIs_production_min.SuspenseList=n;reactIs_production_min.isAsyncMode=function(){return  false};reactIs_production_min.isConcurrentMode=function(){return  false};reactIs_production_min.isContextConsumer=function(a){return v(a)===h};reactIs_production_min.isContextProvider=function(a){return v(a)===g};reactIs_production_min.isElement=function(a){return "object"===typeof a&&null!==a&&a.$$typeof===b};reactIs_production_min.isForwardRef=function(a){return v(a)===l};reactIs_production_min.isFragment=function(a){return v(a)===d};reactIs_production_min.isLazy=function(a){return v(a)===q};reactIs_production_min.isMemo=function(a){return v(a)===p};
-reactIs_production_min.isPortal=function(a){return v(a)===c$1};reactIs_production_min.isProfiler=function(a){return v(a)===f};reactIs_production_min.isStrictMode=function(a){return v(a)===e};reactIs_production_min.isSuspense=function(a){return v(a)===m};reactIs_production_min.isSuspenseList=function(a){return v(a)===n};
-reactIs_production_min.isValidElementType=function(a){return "string"===typeof a||"function"===typeof a||a===d||a===f||a===e||a===m||a===n||a===t||"object"===typeof a&&null!==a&&(a.$$typeof===q||a.$$typeof===p||a.$$typeof===g||a.$$typeof===h||a.$$typeof===l||a.$$typeof===u||void 0!==a.getModuleId)?true:false};reactIs_production_min.typeOf=v;
-
-{
-  reactIs.exports = reactIs_production_min;
-}
-
-var reactIsExports = reactIs.exports;
 
 var baseGetTag$5 = _baseGetTag,
     isObjectLike$6 = isObjectLike_1;
@@ -11976,35 +12174,35 @@ function divergingSqrt() {
 }
 
 const d3Scales = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-    __proto__: null,
-    scaleBand: band,
-    scaleDiverging: diverging,
-    scaleDivergingLog: divergingLog,
-    scaleDivergingPow: divergingPow,
-    scaleDivergingSqrt: divergingSqrt,
-    scaleDivergingSymlog: divergingSymlog,
-    scaleIdentity: identity$4,
-    scaleImplicit: implicit,
-    scaleLinear: linear,
-    scaleLog: log,
-    scaleOrdinal: ordinal,
-    scalePoint: point,
-    scalePow: pow,
-    scaleQuantile: quantile,
-    scaleQuantize: quantize,
-    scaleRadial: radial,
-    scaleSequential: sequential,
-    scaleSequentialLog: sequentialLog,
-    scaleSequentialPow: sequentialPow,
-    scaleSequentialQuantile: sequentialQuantile,
-    scaleSequentialSqrt: sequentialSqrt,
-    scaleSequentialSymlog: sequentialSymlog,
-    scaleSqrt: sqrt,
-    scaleSymlog: symlog,
-    scaleThreshold: threshold,
-    scaleTime: time,
-    scaleUtc: utcTime,
-    tickFormat
+  __proto__: null,
+  scaleBand: band,
+  scaleDiverging: diverging,
+  scaleDivergingLog: divergingLog,
+  scaleDivergingPow: divergingPow,
+  scaleDivergingSqrt: divergingSqrt,
+  scaleDivergingSymlog: divergingSymlog,
+  scaleIdentity: identity$4,
+  scaleImplicit: implicit,
+  scaleLinear: linear,
+  scaleLog: log,
+  scaleOrdinal: ordinal,
+  scalePoint: point,
+  scalePow: pow,
+  scaleQuantile: quantile,
+  scaleQuantize: quantize,
+  scaleRadial: radial,
+  scaleSequential: sequential,
+  scaleSequentialLog: sequentialLog,
+  scaleSequentialPow: sequentialPow,
+  scaleSequentialQuantile: sequentialQuantile,
+  scaleSequentialSqrt: sequentialSqrt,
+  scaleSequentialSymlog: sequentialSymlog,
+  scaleSqrt: sqrt,
+  scaleSymlog: symlog,
+  scaleThreshold: threshold,
+  scaleTime: time,
+  scaleUtc: utcTime,
+  tickFormat
 }, Symbol.toStringTag, { value: 'Module' }));
 
 var isSymbol = isSymbol_1;
@@ -24614,7 +24812,7 @@ const renderCustomizedLabel = ({
     }
   );
 };
-const VocabTable1200 = ({ vocabList, handleImport, handleExport }) => {
+const ProgressChart = ({ vocabList, handleImport, handleExport }) => {
   const statusPieData = getStatusPieData(vocabList);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: "100%", maxWidth: 600, height: 320, margin: "0 auto 24px auto" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveContainer, { width: "100%", height: "100%", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(PieChart, { children: [
@@ -24634,50 +24832,6 @@ const VocabTable1200 = ({ vocabList, handleImport, handleExport }) => {
       /* @__PURE__ */ jsxRuntimeExports.jsx(Tooltip, {}),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Legend, {})
     ] }) }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { marginBottom: 16 }, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "input",
-        {
-          type: "file",
-          accept: ".csv",
-          id: "csvInput",
-          style: { display: "none" },
-          onChange: handleImport
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          onClick: () => document.getElementById("csvInput")?.click(),
-          style: {
-            padding: "0.5rem 1rem",
-            backgroundColor: "#10b981",
-            color: "white",
-            border: "none",
-            borderRadius: "0.375rem",
-            cursor: "pointer",
-            marginRight: 8
-          },
-          children: "匯入 CSV"
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          onClick: handleExport,
-          style: {
-            padding: "0.5rem 1rem",
-            backgroundColor: "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "0.375rem",
-            cursor: "pointer",
-            marginRight: 8
-          },
-          children: "匯出 CSV"
-        }
-      )
-    ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { overflowX: "auto", maxHeight: "70vh" }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { style: { borderCollapse: "collapse", width: "100%" }, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { style: { backgroundColor: "#f3f4f6" }, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("th", { style: { border: "1px solid #d1d5db", padding: "0.5rem" }, children: "主題" }),
@@ -24765,58 +24919,97 @@ const Vocab1200 = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: 24 }, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "國中1200單字表" }),
-    !showQuiz ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 8, marginBottom: 24 }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            style: {
-              padding: "0.5rem 1rem",
-              backgroundColor: "#3b82f6",
-              color: "white",
-              border: "none",
-              borderRadius: "0.375rem",
-              cursor: "pointer",
-              fontWeight: "bold"
-            },
-            children: "單字表"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            style: {
-              padding: "0.5rem 1rem",
-              backgroundColor: "#f59e42",
-              color: "white",
-              border: "none",
-              borderRadius: "0.375rem",
-              cursor: "pointer",
-              fontWeight: "bold"
-            },
-            onClick: () => setShowQuiz(true),
-            children: "考試"
-          }
-        )
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        VocabTable1200,
-        {
-          vocabList,
-          handleImport,
-          handleExport
-        }
-      )
-    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Quiz1200,
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: !showQuiz ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        style: {
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 24,
+          gap: 8
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 20, fontWeight: "bold", color: "#222" }, children: "Progress Chart" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", gap: 8 }, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "file",
+                accept: ".csv",
+                id: "csvInput",
+                style: { display: "none" },
+                onChange: handleImport
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                style: {
+                  padding: "0.5rem 1rem",
+                  backgroundColor: "#10b981",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "0.375rem",
+                  cursor: "pointer",
+                  fontWeight: "bold"
+                },
+                onClick: () => document.getElementById("csvInput")?.click(),
+                children: "Import CSV"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                style: {
+                  padding: "0.5rem 1rem",
+                  backgroundColor: "#3b82f6",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "0.375rem",
+                  cursor: "pointer",
+                  fontWeight: "bold"
+                },
+                onClick: handleExport,
+                children: "Export CSV"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                style: {
+                  padding: "0.5rem 1rem",
+                  backgroundColor: "#f59e42",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "0.375rem",
+                  cursor: "pointer",
+                  fontWeight: "bold"
+                },
+                onClick: () => setShowQuiz(true),
+                children: "Start Quiz"
+              }
+            )
+          ] })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ProgressChart,
       {
         vocabList,
-        onCancel: () => setShowQuiz(false)
+        handleImport,
+        handleExport
       }
     )
-  ] });
+  ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Quiz1200,
+    {
+      vocabList,
+      onCancel: () => setShowQuiz(false)
+    }
+  ) });
 };
 
-export { Vocab1200 as default };
+export { Vocab1200 as default, reactIsExports as r };

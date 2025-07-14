@@ -170,46 +170,7 @@ const personalCenterRouter = {
 	],
 };
 
-const routeNestRouter = {
-	path: "/route-nest",
-	handle: {
-		order: routeNest,
-		title: "common.menu.nestMenus",
-		icon: "NodeExpandOutlined",
-	},
-	children: [
-		{
-			path: "/route-nest/menu1",
-			handle: {
-				title: "common.menu.menu1",
-				icon: "SisternodeOutlined",
-			},
-			children: [
-				{
-					path: "/route-nest/menu1/menu1-1",
-					handle: {
-						title: "common.menu.menu1-1",
-						icon: ("SubnodeOutlined"),
-					},
-				},
-				{
-					path: "/route-nest/menu1/menu1-2",
-					handle: {
-						title: "common.menu.menu1-2",
-						icon: ("SubnodeOutlined"),
-					},
-				},
-			],
-		},
-		{
-			path: "/route-nest/menu2",
-			handle: {
-				title: "common.menu.menu2",
-				icon: "SubnodeOutlined",
-			},
-		},
-	],
-};
+
 
 const englishGroup = {
 	path: "/english",
@@ -319,7 +280,7 @@ export default defineFakeRoute([
 					//systemManagementRouter,
 					//outsideRouter,
 					//personalCenterRouter,
-					routeNestRouter,
+
 					englishGroup,
 				],
 			);

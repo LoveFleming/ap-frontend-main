@@ -3,7 +3,7 @@ const currentImports = {};
       let moduleMap = {
 "./App":()=>{
       dynamicLoadingCss([], false, './App');
-      return __federation_import('./__federation_expose_App-glf99unR.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
+      return __federation_import('./__federation_expose_App-DTEKO5qW.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
 "./IrregularVerbTable":()=>{
       dynamicLoadingCss([], false, './IrregularVerbTable');
       return __federation_import('./__federation_expose_IrregularVerbTable-DHWIv2bz.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
@@ -12,7 +12,7 @@ const currentImports = {};
       return __federation_import('./__federation_expose_ArticlePractice-Egk1E0ib.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
 "./Vocab1200":()=>{
       dynamicLoadingCss([], false, './Vocab1200');
-      return __federation_import('./__federation_expose_Vocab1200-BBrlVn_N.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},};
+      return __federation_import('./__federation_expose_Vocab1200-DiWDd5o8.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},};
       const seen = {};
       const dynamicLoadingCss = (cssFilePaths, dontAppendStylesToHead, exposeItemName) => {
         const metaUrl = import.meta.url;
