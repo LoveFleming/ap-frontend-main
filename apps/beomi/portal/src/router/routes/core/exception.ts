@@ -13,9 +13,8 @@ import {
 } from "@ant-design/icons";
 import React, { createElement, lazy } from "react";
 
-const Exception403 = lazy(() =>
-	import("../../../../../packages/shared-ui/src/pages/exception/403").then(mod => ({ default: mod.default }))
-);
+// 修正 import，改用本地 alias
+const Exception403 = lazy(() => import("#src/pages/exception/403"));
 //const Exception403 = lazy(() => import("#src/pages/exception/403"));
 const Exception404 = lazy(() => import("#src/pages/exception/404"));
 const Exception500 = lazy(() => import("#src/pages/exception/500/index.js"));
